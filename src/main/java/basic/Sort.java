@@ -10,8 +10,7 @@ public class Sort {
         if (array == null || array.length <= 1) {
             return;
         }
-        int[] backup = new int[array.length];
-        mergeSort(array, 0, array.length - 1, backup);
+        mergeSort(array, 0, array.length - 1);
     }
 
     private static void quickSort(int[] array, int i, int j) {
@@ -47,27 +46,27 @@ public class Sort {
         array[j] = tmp;
     }
 
-    private static void mergeSort(int[] array, int i, int j, int[] backup) {
+    private static void shift(int[] array, int i, int j) {
+        while (i < j) {
+            swap(array, j - 1, j);
+            j--;
+        }
+    }
+
+    private static void mergeSort(int[] array, int i, int j) {
         if (i == j) {
             return;
         }
         int mid = i + (j - i) / 2;
-        mergeSort(array, i, mid, backup);
-        mergeSort(array, mid + 1, j, backup);
-        int a = i, b = i, c = mid + 1;
-        while (b <= mid && c <= j) {
-            if (array[b] > array[c]) {
-                backup[a++] = array[c++];
+        mergeSort(array, i, mid);
+        mergeSort(array, mid + 1, j);
+        int a = i, b = mid + 1;
+        while (a <= j && b <= j) {
+            if (array[a] <= array[b]) {
+                a++;
             } else {
-                backup[a++] = array[b++];
+                shift(array, a++, b++);
             }
         }
-        while (b <= mid) {
-            backup[a++] = array[b++];
-        }
-        while (c <= j) {
-            backup[a++] = array[c++];
-        }
-        System.arraycopy(backup, i, array, i, j - i + 1);
     }
 }
